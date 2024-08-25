@@ -1,41 +1,12 @@
-from selenium import webdriver
 import pytest
 
-from selenium import webdriver
-from selenium.webdriver.edge.service import Service
-from selenium.webdriver.edge.options import Options
-from webdriver_manager.microsoft import EdgeChromiumDriverManager
-import requests
-from requests import head
-from selenium.webdriver.common.by import By
+def add_numbers(a, b):
+    return a + b
 
-@pytest.fixture()
-    # Initialize the Selenium driver
-def test_setup():
-    global driver
-    driver = webdriver.Edge(service=Service(EdgeChromiumDriverManager().install()))
+def test_add_numbers():
+    assert add_numbers(2, 3) == 5
+    assert add_numbers(-1, 1) == 0
+    assert add_numbers(0, 0) == 0
 
-    # Navigate to the webpage you want to test
-    driver.get('/')
-
-    # Find all <a> tags on the page
-    links = driver.find_elements(By.TAG_NAME, 'a')
-
-    broken_links = 0
-    for link in links:
-        try:
-            url = link.get_attribute('href')
-            # Use the requests library to send a HEAD request
-            response = head(url, timeout=30)
-            # Check if the link is broken based on HTTP status code
-            if response.status_code >= 400:
-                print(f'Broken link found: {url} with status code {response.status_code}')
-                broken_links += 1
-        except Exception as e:
-            print(f'Error checking link {url}: {e}')
-
-    print(f'Total broken links found: {broken_links}')
-
-    # Clean up by closing the browser
-    yield
-    driver.quit()
+if __name__ == "__main__":
+    pytest.main()
