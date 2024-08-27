@@ -1,7 +1,11 @@
 import pytest
-from app import app  # Import the Flask app instance from app/__init__.py
+from unittest.mock import patch
+from app import app
 
 @pytest.fixture
 def client():
     with app.test_client() as client:
-        yield client
+        with patch('app.views.getCursor') as mock_getCursor:
+            # Mock the return value of the cursor to avoid real DB calls
+            mock_getCursor.return_value = None
+            yield client
