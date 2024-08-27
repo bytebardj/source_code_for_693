@@ -1,11 +1,7 @@
-from unittest.mock import patch
-from app import app
+import pytest
 
-@patch('app.views.getCursor')
-def test_homepage(mock_getCursor, client):
-    # Mock the return value of the database cursor to avoid real DB calls
-    mock_getCursor.return_value = None
-
+@pytest.mark.skipif(not connect.dbuser, reason="No database connection available")
+def test_homepage(client):
     response = client.get('/')
     assert response.status_code == 200
     assert b'Welcome' in response.data
