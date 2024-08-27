@@ -8,3 +8,6 @@ from app import staff_views
 from app import admin_views
 from app import customer_views
 from app import account_holder_views
+
+
+from app import views  # Import views to register routes
