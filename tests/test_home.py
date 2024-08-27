@@ -4,4 +4,3 @@ def test_homepage(client):
     assert b'<title>' in response.data  # Check for something you know exists
     # Optionally, check for a specific HTML element or text
     # assert b'Some known text' in response.data
-    #
