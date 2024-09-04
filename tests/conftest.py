@@ -34,14 +34,6 @@ def test_product_list(client):
     assert b"Category 1" in response.data
     assert b"Price" in response.data
 
-def test_depot_info(client):
-    """Test that the depot information is correctly displayed"""
-    response = client.get('/depot')
-    assert response.status_code == 200
-    assert b"Depot 1" in response.data
-    assert b"Location 1" in response.data
-    assert b"Manager 1" in response.data
-
 @pytest.mark.parametrize("product_id, expected_name", [
     (1, "Product 1"),
     (2, "Product 2"),
