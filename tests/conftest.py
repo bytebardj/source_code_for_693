@@ -18,6 +18,7 @@ def client():
                 mock_get_depot.return_value = [('Depot 1', 'Location 1', 'Manager 1')]
                 yield client
 
+
 # Add these new test functions
 
 def test_home_page(client):
@@ -33,21 +34,6 @@ def test_product_list(client):
     assert b"Product 1" in response.data
     assert b"Category 1" in response.data
     assert b"Price" in response.data
-
-@pytest.mark.parametrize("product_id, expected_name", [
-    (1, "Product 1"),
-    (2, "Product 2"),
-])
-
-def test_add_to_cart(client):
-    """Test adding a product to the cart"""
-    response = client.post('/add-to-cart', data={'product_id': 1, 'quantity': 2})
-    assert response.status_code == 302
-
-def test_invalid_route(client):
-    """Test that an invalid route returns a 404 error"""
-    response = client.get('/nonexistent-page')
-    assert response.status_code == 404
 
 def test_webapp_functionality():
     # Setup WebDriver (e.g., Chrome)
@@ -82,3 +68,18 @@ def test_webapp_functionality():
 
 if __name__ == "__main__":
     test_webapp_functionality()
+
+@pytest.mark.parametrize("product_id, expected_name", [
+    (1, "Product 1"),
+    (2, "Product 2"),
+])
+
+def test_add_to_cart(client):
+    """Test adding a product to the cart"""
+    response = client.post('/add-to-cart', data={'product_id': 1, 'quantity': 2})
+    assert response.status_code == 302
+
+def test_invalid_route(client):
+    """Test that an invalid route returns a 404 error"""
+    response = client.get('/nonexistent-page')
+    assert response.status_code == 404
