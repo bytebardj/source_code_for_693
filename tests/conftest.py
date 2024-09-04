@@ -48,3 +48,37 @@ def test_invalid_route(client):
     """Test that an invalid route returns a 404 error"""
     response = client.get('/nonexistent-page')
     assert response.status_code == 404
+
+def test_webapp_functionality():
+    # Setup WebDriver (e.g., Chrome)
+    driver = webdriver.Chrome()
+    
+    try:
+        # Navigate to your webapp
+        driver.get("http://127.0.0.1:5000/")
+        
+        # Test scenario 1: Login
+        username_field = driver.find_element(By.ID, "username")
+        password_field = driver.find_element(By.ID, "password")
+        login_button = driver.find_element(By.ID, "login-button")
+        
+        username_field.send_keys("your_username")
+        password_field.send_keys("your_password")
+        login_button.click()
+        
+        # Wait for successful login (e.g., dashboard page load)
+        WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, "dashboard"))
+        )
+        
+        # Add more test scenarios here
+        
+        # Assert expected results
+        assert "Dashboard" in driver.title
+        
+    finally:
+        # Cleanup
+        driver.quit()
+
+if __name__ == "__main__":
+    test_webapp_functionality()
