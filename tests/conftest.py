@@ -55,7 +55,7 @@ def test_product_detail(client, product_id, expected_name):
 def test_add_to_cart(client):
     """Test adding a product to the cart"""
     response = client.post('/add-to-cart', data={'product_id': 1, 'quantity': 2})
-    assert response.status_code == 302  # Assuming a redirect after adding to cart
+    assert response.status_code == 302
 
 def test_invalid_route(client):
     """Test that an invalid route returns a 404 error"""
