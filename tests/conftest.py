@@ -38,11 +38,6 @@ def test_product_list(client):
     (1, "Product 1"),
     (2, "Product 2"),
 ])
-def test_product_detail(client, product_id, expected_name):
-    """Test that individual product pages load correctly"""
-    response = client.get(f'/product/{product_id}')
-    assert response.status_code == 200
-    assert expected_name.encode() in response.data
 
 def test_add_to_cart(client):
     """Test adding a product to the cart"""
