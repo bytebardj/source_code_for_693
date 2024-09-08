@@ -1,33 +1,26 @@
 import pytest
 from unittest.mock import patch, MagicMock
 from app import app
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import coverage
 import os
 
-cov = coverage.Coverage(source=['app'])  # Replace 'app' with your main application package
-cov.start()
+# Initialize coverage only if it's not already running
+if 'COVERAGE_PROCESS_START' not in os.environ:
+    cov = coverage.Coverage(source=['app'])
+    cov.start()
+else:
+    cov = None
 
 @pytest.fixture(scope='session', autouse=True)
 def setup_coverage(request):
     """Set up coverage for all tests."""
     yield
-    # Stop coverage after all tests have run
-    cov.stop()
-    cov.save()
-    cov.html_report(directory='coverage_html')
-    cov.xml_report(outfile='coverage.xml')
-
-@pytest.fixture
-def selenium_driver():
-    chrome_options = Options()
-    chrome_options.add_argument("--headless")  # Run Chrome in headless mode
-    driver = webdriver.Chrome(options=chrome_options)
-    yield driver
-    driver.quit()
+    # Stop coverage after all tests have run, only if we started it
+    if cov:
+        cov.stop()
+        cov.save()
+        cov.html_report(directory='coverage_html')
+        cov.xml_report(outfile='coverage.xml')
 
 @pytest.fixture
 def client():
