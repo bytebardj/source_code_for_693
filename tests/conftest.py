@@ -8,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import coverage
 import os
 
+
 cov = coverage.Coverage(source=['app'])  # Replace 'app' with your main application package
 cov.start()
 
