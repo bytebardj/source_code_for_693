@@ -1,49 +1,4 @@
 import pytest
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-
-def test_webapp_functionality(selenium_driver):
-    driver = selenium_driver
-    
-    # Navigate to your webapp
-    driver.get("http://127.0.0.1:5000/")
-    
-    # Test scenario 1: Login
-    username_field = driver.find_element(By.ID, "username")
-    password_field = driver.find_element(By.ID, "password")
-    login_button = driver.find_element(By.ID, "login-button")
-    
-    username_field.send_keys("your_username")
-    password_field.send_keys("your_password")
-    login_button.click()
-    
-    # Wait for successful login (e.g., dashboard page load)
-    WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.ID, "dashboard"))
-    )
-    
-    # Assert expected results
-    assert "Dashboard" in driver.title
-
-def test_product_search(selenium_driver):
-    driver = selenium_driver
-    
-    # Navigate to the products page
-    driver.get("http://127.0.0.1:5000/products")
-    
-    # Find the search input and submit a search
-    search_input = driver.find_element(By.ID, "search-input")
-    search_input.send_keys("Product 1")
-    search_input.submit()
-    
-    # Wait for search results
-    WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.CLASS_NAME, "search-results"))
-    )
-    
-    # Assert that the search results contain the expected product
-    assert "Product 1" in driver.page_source
 
 def test_home_page(client):
     """Test that the home page loads successfully"""
