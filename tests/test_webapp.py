@@ -110,7 +110,7 @@ def test_update_user_profile(client):
         'email': 'newemail@example.com',
         'bio': 'This is a new bio'
     })
-    assert response.status_code == 302  # or 200 if it doesn't redirect
+    assert response.status_code == 302  # Assuming redirect after update
     
     # Check if profile was updated
     response = client.get('/profile')
