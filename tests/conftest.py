@@ -5,6 +5,10 @@ from webdriver_manager.chrome import ChromeDriverManager
 from app import app
 import threading
 import time
+import os
+import coverage
+from unittest.mock import MagicMock
+from unittest.mock import patch
 
 # Initialize coverage only if it's not already running
 if 'COVERAGE_PROCESS_START' not in os.environ:
