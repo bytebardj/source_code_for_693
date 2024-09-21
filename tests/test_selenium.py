@@ -6,6 +6,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import TimeoutException, WebDriverException
+import os
+
+BASE_URL = os.environ.get('TEST_BASE_URL', 'http://localhost:5000')
 
 @pytest.fixture(scope="module")
 def driver():
@@ -26,7 +29,7 @@ def driver():
 @pytest.mark.timeout(10)
 def test_home_page(driver):
     try:
-        driver.get("http://localhost:5000")
+        driver.get(f"{BASE_URL}/")
         assert "Your Website Title" in driver.title
     except TimeoutException:
         pytest.fail("Timed out waiting for home page to load")
