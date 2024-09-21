@@ -4,7 +4,6 @@ from app import app
 import coverage
 import os
 
-
 # Initialize coverage only if it's not already running
 if 'COVERAGE_PROCESS_START' not in os.environ:
     cov = coverage.Coverage(source=['app'])
