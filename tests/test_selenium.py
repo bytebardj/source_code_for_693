@@ -7,23 +7,32 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import TimeoutException, WebDriverException
 import os
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 BASE_URL = os.environ.get('TEST_BASE_URL', 'http://localhost:5000')
 
 @pytest.fixture(scope="module")
 def driver():
+    logger.info("Setting up WebDriver")
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     try:
+        logger.info("Installing ChromeDriver")
         service = Service(ChromeDriverManager().install())
+        logger.info("Initializing Chrome WebDriver")
         driver = webdriver.Chrome(service=service, options=options)
         yield driver
     except WebDriverException as e:
+        logger.error(f"Failed to initialize WebDriver: {e}")
         pytest.skip(f"Could not initialize WebDriver: {e}")
     finally:
         if 'driver' in locals():
+            logger.info("Quitting WebDriver")
             driver.quit()
 
 @pytest.mark.timeout(10)
