@@ -1,8 +1,10 @@
 import pytest
-from unittest.mock import patch, MagicMock
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from app import app
-import coverage
-import os
+import threading
+import time
 
 # Initialize coverage only if it's not already running
 if 'COVERAGE_PROCESS_START' not in os.environ:
@@ -10,6 +12,7 @@ if 'COVERAGE_PROCESS_START' not in os.environ:
     cov.start()
 else:
     cov = None
+
 
 @pytest.fixture(scope='session', autouse=True)
 def setup_coverage(request):
@@ -37,6 +40,26 @@ def client():
             with patch('app.views.get_depot') as mock_get_depot:
                 mock_get_depot.return_value = [('Depot 1', 'Location 1', 'Manager 1')]
                 yield client
+def flask_app():
+    # Start Flask app in a separate thread
+    thread = threading.Thread(target=app.run)
+    thread.daemon = True
+    thread.start()
+    time.sleep(1)  # Give the server a second to ensure it's started
+    yield app
+    # Cleanup
+    thread.join(1)
+
+@pytest.fixture(scope="module")
+def driver(flask_app):
+    service = Service(ChromeDriverManager().install())
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    driver = webdriver.Chrome(service=service, options=options)
+    yield driver
+    driver.quit()
 
 def test_home_page(client):
     """Test that the home page loads successfully"""
