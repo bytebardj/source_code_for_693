@@ -7,32 +7,23 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import TimeoutException, WebDriverException
 import os
-import logging
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 BASE_URL = os.environ.get('TEST_BASE_URL', 'http://localhost:5000')
 
 @pytest.fixture(scope="module")
 def driver():
-    logger.info("Setting up WebDriver")
     options = webdriver.ChromeOptions()
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     try:
-        logger.info("Installing ChromeDriver")
         service = Service(ChromeDriverManager().install())
-        logger.info("Initializing Chrome WebDriver")
         driver = webdriver.Chrome(service=service, options=options)
         yield driver
     except WebDriverException as e:
-        logger.error(f"Failed to initialize WebDriver: {e}")
         pytest.skip(f"Could not initialize WebDriver: {e}")
     finally:
         if 'driver' in locals():
-            logger.info("Quitting WebDriver")
             driver.quit()
 
 @pytest.mark.timeout(10)
@@ -46,7 +37,7 @@ def test_home_page(driver):
 @pytest.mark.timeout(10)
 def test_product_list(driver):
     try:
-        driver.get("http://localhost:5000/products")
+        driver.get(f"{BASE_URL}/products")
         wait = WebDriverWait(driver, 5)
         products = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, "product")))
         assert len(products) > 0
@@ -56,7 +47,7 @@ def test_product_list(driver):
 @pytest.mark.timeout(10)
 def test_add_to_cart(driver):
     try:
-        driver.get("http://localhost:5000/products")
+        driver.get(f"{BASE_URL}/products")
         wait = WebDriverWait(driver, 5)
         add_to_cart_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".product .add-to-cart")))
         add_to_cart_button.click()
@@ -69,12 +60,12 @@ def test_add_to_cart(driver):
 @pytest.mark.timeout(15)
 def test_checkout_process(driver):
     try:
-        driver.get("http://localhost:5000/products")
+        driver.get(f"{BASE_URL}/products")
         wait = WebDriverWait(driver, 5)
         add_to_cart_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".product .add-to-cart")))
         add_to_cart_button.click()
         
-        driver.get("http://localhost:5000/cart")
+        driver.get(f"{BASE_URL}/cart")
         checkout_button = wait.until(EC.element_to_be_clickable((By.ID, "checkout-button")))
         checkout_button.click()
         
