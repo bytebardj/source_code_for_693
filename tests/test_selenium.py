@@ -80,3 +80,4 @@ def test_checkout_process(driver):
         assert "Thank you for your order" in confirmation.text
     except TimeoutException:
         pytest.fail("Timed out during checkout process")
+        
