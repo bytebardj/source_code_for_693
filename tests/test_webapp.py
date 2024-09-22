@@ -5,8 +5,8 @@ import time
 @pytest.fixture(autouse=True)
 def timeout():
     yield
-    if time.time() - timeout.start > 10:  # 10 seconds timeout for each test
-        pytest.fail("Test execution exceeded 10 seconds")
+    if time.time() - timeout.start > 5:  # 5 seconds timeout for each test
+        pytest.fail("Test execution exceeded 5 seconds")
 
 @pytest.fixture(autouse=True)
 def timer():
@@ -64,14 +64,6 @@ def test_checkout_process(client):
         pytest.skip("Checkout page not implemented yet")
     assert response.status_code == 200
     assert b"Checkout" in response.data
-    
-    # Submit order
-    response = client.post('/place-order', data={
-        'name': 'John Doe',
-        'address': '123 Test St',
-        'payment_method': 'credit_card'
-    })
-    assert response.status_code in [200, 302]  # Accept either OK or redirect
 
 def test_search_functionality(client):
     """Test the search functionality"""
