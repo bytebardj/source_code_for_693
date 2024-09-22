@@ -9,7 +9,6 @@ from selenium.common.exceptions import TimeoutException, WebDriverException
 import os
 from selenium.webdriver.chrome.options import Options
 
-
 options = Options()
 options.add_argument("--headless")
 driver = webdriver.Chrome(options=options)
