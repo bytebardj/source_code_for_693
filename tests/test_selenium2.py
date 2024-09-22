@@ -3,9 +3,9 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
-from requests import head
 from selenium.webdriver.common.by import By
-
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 @pytest.fixture(scope="module")
 def driver():
@@ -21,26 +21,14 @@ def driver():
         if 'driver' in locals():
             driver.quit()
 
-# Navigate to the webpage you want to test
-driver.get('http://localhost:5001')
+def test_homepage(driver):
+    driver.get('http://localhost:5001')
+    assert "Your Website Title" in driver.title
 
-# Find all <a> tags on the page
-links = driver.find_elements(By.TAG_NAME, 'a')
+def test_product_list(driver):
+    driver.get('http://localhost:5001/products')
+    wait = WebDriverWait(driver, 10)
+    products = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, "product")))
+    assert len(products) > 0
 
-broken_links = 0
-for link in links:
-    try:
-        url = link.get_attribute('href')
-        # Use the requests library to send a HEAD request
-        response = head(url, timeout=30)
-        # Check if the link is broken based on HTTP status code
-        if response.status_code >= 400:
-            print(f'Broken link found: {url} with status code {response.status_code}')
-            broken_links += 1
-    except Exception as e:
-        print(f'Error checking link {url}: {e}')
-
-print(f'Total broken links found: {broken_links}')
-
-# Clean up by closing the browser
-driver.quit()
+# Add more test functions as needed
