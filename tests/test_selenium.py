@@ -7,7 +7,21 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import TimeoutException, WebDriverException
 import os
+from selenium.webdriver.chrome.options import Options
 
+
+options = Options()
+options.add_argument("--headless")
+driver = webdriver.Chrome(options=options)
+
+# Set an explicit timeout for all browser interactions
+driver.set_page_load_timeout(60)
+driver.implicitly_wait(30)
+
+# Example: Wait until an element is present
+element = WebDriverWait(driver, 30).until(
+    EC.presence_of_element_located((By.NAME, "q"))
+)
 
 BASE_URL = os.environ.get('TEST_BASE_URL', 'http://localhost:5000')
 
