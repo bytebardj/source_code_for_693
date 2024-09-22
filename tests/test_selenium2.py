@@ -1,13 +1,25 @@
+import pytest
 from selenium import webdriver
-from selenium.webdriver.edge.service import Service
-from selenium.webdriver.edge.options import Options
-from webdriver_manager.microsoft import EdgeChromiumDriverManager
-import requests
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from requests import head
 from selenium.webdriver.common.by import By
 
-# Initialize the Selenium driver
-driver = webdriver.Edge(service=Service(EdgeChromiumDriverManager().install()))
+
+@pytest.fixture(scope="module")
+def driver():
+    options = Options()
+    options.add_argument('--headless')
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    try:
+        service = Service(ChromeDriverManager().install())
+        driver = webdriver.Chrome(service=service, options=options)
+        yield driver
+    finally:
+        if 'driver' in locals():
+            driver.quit()
 
 # Navigate to the webpage you want to test
 driver.get('http://localhost:5001')
