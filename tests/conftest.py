@@ -10,6 +10,7 @@ import coverage
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
+
 # Initialize coverage only if it's not already running
 if 'COVERAGE_PROCESS_START' not in os.environ:
     cov = coverage.Coverage(source=['app'])
@@ -94,4 +95,3 @@ def test_invalid_route(client):
     """Test that an invalid route returns a 404 error"""
     response = client.get('/nonexistent-page')
     assert response.status_code == 404
-    
