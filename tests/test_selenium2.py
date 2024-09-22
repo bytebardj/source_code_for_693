@@ -31,4 +31,5 @@ def test_product_list(driver):
     products = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, "product")))
     assert len(products) > 0
 
+
 # Add more test functions as needed
