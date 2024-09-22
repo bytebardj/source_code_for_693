@@ -22,7 +22,7 @@ element = WebDriverWait(driver, 30).until(
     EC.presence_of_element_located((By.NAME, "q"))
 )
 
-BASE_URL = os.environ.get('TEST_BASE_URL', 'http://localhost:5000')
+BASE_URL = os.environ.get('TEST_BASE_URL', 'http://localhost:5001')
 
 @pytest.fixture(scope="module")
 def driver():
