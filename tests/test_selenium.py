@@ -8,6 +8,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import TimeoutException, WebDriverException
 import os
 
+
 BASE_URL = os.environ.get('TEST_BASE_URL', 'http://localhost:5000')
 
 @pytest.fixture(scope="module")
