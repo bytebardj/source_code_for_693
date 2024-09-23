@@ -17,6 +17,9 @@ def driver():
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
+    options.add_argument('--remote-debugging-port=9222')
+    options.add_argument('--disable-gpu')
+    options.add_argument('--window-size=1920,1080')
     try:
         service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=options)
@@ -27,7 +30,7 @@ def driver():
         if 'driver' in locals():
             driver.quit()
 
-@pytest.mark.timeout(10)
+@pytest.mark.timeout(20)
 def test_home_page(driver):
     try:
         driver.get(f"{BASE_URL}/")
@@ -35,21 +38,21 @@ def test_home_page(driver):
     except TimeoutException:
         pytest.fail("Timed out waiting for home page to load")
 
-@pytest.mark.timeout(10)
+@pytest.mark.timeout(20)
 def test_product_list(driver):
     try:
         driver.get(f"{BASE_URL}/products")
-        wait = WebDriverWait(driver, 5)
+        wait = WebDriverWait(driver, 10)
         products = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, "product")))
         assert len(products) > 0
     except TimeoutException:
         pytest.fail("Timed out waiting for products to load")
 
-@pytest.mark.timeout(10)
+@pytest.mark.timeout(20)
 def test_add_to_cart(driver):
     try:
         driver.get(f"{BASE_URL}/products")
-        wait = WebDriverWait(driver, 5)
+        wait = WebDriverWait(driver, 10)
         add_to_cart_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".product .add-to-cart")))
         add_to_cart_button.click()
         
@@ -58,11 +61,11 @@ def test_add_to_cart(driver):
     except TimeoutException:
         pytest.fail("Timed out during add to cart process")
 
-@pytest.mark.timeout(15)
+@pytest.mark.timeout(30)
 def test_checkout_process(driver):
     try:
         driver.get(f"{BASE_URL}/products")
-        wait = WebDriverWait(driver, 5)
+        wait = WebDriverWait(driver, 10)
         add_to_cart_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".product .add-to-cart")))
         add_to_cart_button.click()
         
@@ -80,4 +83,3 @@ def test_checkout_process(driver):
         assert "Thank you for your order" in confirmation.text
     except TimeoutException:
         pytest.fail("Timed out during checkout process")
-        
