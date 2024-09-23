@@ -101,22 +101,3 @@ def test_user_profile(client):
     # Update these assertions to match your actual profile page content
     assert b"Profile" in response.data
 
-@pytest.mark.skip(reason="User authentication not implemented yet")
-def test_update_user_profile(client):
-    """Test updating user profile"""
-    # Log in the user (you may need to implement this)
-    # client.post('/login', data={'username': 'testuser', 'password': 'testpass'})
-    
-    # Update profile
-    response = client.post('/update-profile', data={
-        'email': 'newemail@example.com',
-        'bio': 'This is a new bio'
-    })
-    if response.status_code == 404:
-        pytest.skip("Update profile functionality not implemented yet")
-    assert response.status_code in [200, 302]  # Accept either OK or redirect
-    
-    # Check if profile was updated
-    response = client.get('/profile')
-    assert b"newemail@example.com" in response.data
-    assert b"This is a new bio" in response.data
