@@ -11,6 +11,7 @@ from selenium.webdriver.chrome.options import Options
 
 BASE_URL = os.environ.get('TEST_BASE_URL', 'http://localhost:5001')
 
+
 @pytest.fixture(scope="module")
 def driver():
     options = Options()
@@ -20,6 +21,9 @@ def driver():
     options.add_argument('--remote-debugging-port=9222')
     options.add_argument('--disable-gpu')
     options.add_argument('--window-size=1920,1080')
+    options.add_argument('--disable-software-rasterizer')  # Add this line
+    options.add_argument('--enable-logging')  # Add this line
+    options.add_argument('--v=1')  # Add this line for verbose logging
     try:
         service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=options)
