@@ -14,7 +14,8 @@ BASE_URL = os.environ.get('TEST_BASE_URL', 'http://localhost:5001')
 @pytest.fixture(scope="module")
 def driver():
     options = Options()
-    options.add_argument('--headless')  # Run in headless mode
+    # Comment out the headless option for debugging
+    # options.add_argument('--headless')  
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--remote-debugging-port=9222')
