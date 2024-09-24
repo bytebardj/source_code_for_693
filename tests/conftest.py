@@ -18,7 +18,6 @@ if 'COVERAGE_PROCESS_START' not in os.environ:
 else:
     cov = None
 
-
 @pytest.fixture(scope='session', autouse=True)
 def setup_coverage(request):
     """Set up coverage for all tests."""
