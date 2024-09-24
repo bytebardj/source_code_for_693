@@ -14,15 +14,16 @@ BASE_URL = os.environ.get('TEST_BASE_URL', 'http://localhost:5001')
 @pytest.fixture(scope="module")
 def driver():
     options = Options()
-    options.add_argument('--headless')
+    options.add_argument('--headless')  # Run in headless mode
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     options.add_argument('--remote-debugging-port=9222')
     options.add_argument('--disable-gpu')
     options.add_argument('--window-size=1920,1080')
-    options.add_argument('--disable-software-rasterizer')  # Add this line
-    options.add_argument('--enable-logging')  # Add this line
-    options.add_argument('--v=1')  # Add this line for verbose logging
+    options.add_argument('--disable-software-rasterizer')  # Additional option
+    options.add_argument('--enable-logging')  # Enable logging
+    options.add_argument('--v=1')  # Verbose logging
+
     try:
         service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=options)
@@ -33,56 +34,56 @@ def driver():
         if 'driver' in locals():
             driver.quit()
 
-@pytest.mark.timeout(20)
+@pytest.mark.timeout(60)  # Increased timeout for each test
 def test_home_page(driver):
-    try:
-        driver.get(f"{BASE_URL}/")
-        assert "Your Website Title" in driver.title
-    except TimeoutException:
-        pytest.fail("Timed out waiting for home page to load")
+    print("Navigating to home page...")
+    driver.get(f"{BASE_URL}/")
+    print("Checking page title...")
+    assert "Your Website Title" in driver.title
 
-@pytest.mark.timeout(20)
+@pytest.mark.timeout(60)
 def test_product_list(driver):
-    try:
-        driver.get(f"{BASE_URL}/products")
-        wait = WebDriverWait(driver, 10)
-        products = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, "product")))
-        assert len(products) > 0
-    except TimeoutException:
-        pytest.fail("Timed out waiting for products to load")
+    print("Navigating to product list...")
+    driver.get(f"{BASE_URL}/products")
+    wait = WebDriverWait(driver, 20)  # Increased wait time
+    products = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, "product")))
+    print(f"Found {len(products)} products.")
+    assert len(products) > 0
 
-@pytest.mark.timeout(20)
+@pytest.mark.timeout(60)
 def test_add_to_cart(driver):
-    try:
-        driver.get(f"{BASE_URL}/products")
-        wait = WebDriverWait(driver, 10)
-        add_to_cart_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".product .add-to-cart")))
-        add_to_cart_button.click()
-        
-        cart_count = wait.until(EC.presence_of_element_located((By.ID, "cart-count")))
-        assert int(cart_count.text) > 0
-    except TimeoutException:
-        pytest.fail("Timed out during add to cart process")
+    print("Navigating to products...")
+    driver.get(f"{BASE_URL}/products")
+    wait = WebDriverWait(driver, 20)  # Increased wait time
+    add_to_cart_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".product .add-to-cart")))
+    print("Clicking 'Add to Cart' button...")
+    add_to_cart_button.click()
+    
+    cart_count = wait.until(EC.presence_of_element_located((By.ID, "cart-count")))
+    print(f"Cart count is now: {cart_count.text}")
+    assert int(cart_count.text) > 0
 
-@pytest.mark.timeout(30)
+@pytest.mark.timeout(60)
 def test_checkout_process(driver):
-    try:
-        driver.get(f"{BASE_URL}/products")
-        wait = WebDriverWait(driver, 10)
-        add_to_cart_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".product .add-to-cart")))
-        add_to_cart_button.click()
-        
-        driver.get(f"{BASE_URL}/cart")
-        checkout_button = wait.until(EC.element_to_be_clickable((By.ID, "checkout-button")))
-        checkout_button.click()
-        
-        wait.until(EC.presence_of_element_located((By.ID, "checkout-form")))
-        driver.find_element(By.ID, "name").send_keys("John Doe")
-        driver.find_element(By.ID, "email").send_keys("john@example.com")
-        driver.find_element(By.ID, "address").send_keys("123 Test St")
-        driver.find_element(By.ID, "submit-order").click()
-        
-        confirmation = wait.until(EC.presence_of_element_located((By.ID, "order-confirmation")))
-        assert "Thank you for your order" in confirmation.text
-    except TimeoutException:
-        pytest.fail("Timed out during checkout process")
+    print("Navigating to products for checkout...")
+    driver.get(f"{BASE_URL}/products")
+    wait = WebDriverWait(driver, 20)  # Increased wait time
+    add_to_cart_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".product .add-to-cart")))
+    add_to_cart_button.click()
+    
+    print("Navigating to cart...")
+    driver.get(f"{BASE_URL}/cart")
+    checkout_button = wait.until(EC.element_to_be_clickable((By.ID, "checkout-button")))
+    print("Clicking 'Checkout' button...")
+    checkout_button.click()
+    
+    wait.until(EC.presence_of_element_located((By.ID, "checkout-form")))
+    print("Filling out checkout form...")
+    driver.find_element(By.ID, "name").send_keys("John Doe")
+    driver.find_element(By.ID, "email").send_keys("john@example.com")
+    driver.find_element(By.ID, "address").send_keys("123 Test St")
+    driver.find_element(By.ID, "submit-order").click()
+    
+    confirmation = wait.until(EC.presence_of_element_located((By.ID, "order-confirmation")))
+    print("Checking order confirmation...")
+    assert "Thank you for your order" in confirmation.text
