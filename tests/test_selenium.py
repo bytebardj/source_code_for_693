@@ -11,7 +11,6 @@ from selenium.webdriver.chrome.options import Options
 
 BASE_URL = os.environ.get('TEST_BASE_URL', 'http://localhost:5001')
 
-
 @pytest.fixture(scope="module")
 def driver():
     options = Options()
