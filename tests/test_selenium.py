@@ -33,7 +33,7 @@ def driver():
     finally:
         if 'driver' in locals():
             driver.quit()
-'''
+
 @pytest.mark.timeout(20)
 def test_home_page(driver):
     try:
@@ -87,4 +87,3 @@ def test_checkout_process(driver):
         assert "Thank you for your order" in confirmation.text
     except TimeoutException:
         pytest.fail("Timed out during checkout process")
-'''
