@@ -9,7 +9,6 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.firefox import GeckoDriverManager
 
-
 BASE_URL = os.environ.get('TEST_BASE_URL', 'http://localhost:5001')
 
 @pytest.fixture(scope="module")
