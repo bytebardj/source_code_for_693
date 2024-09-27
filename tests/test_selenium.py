@@ -3,11 +3,11 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import TimeoutException, WebDriverException
 import os
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from webdriver_manager.firefox import GeckoDriverManager
 
 
 BASE_URL = os.environ.get('TEST_BASE_URL', 'http://localhost:5001')
@@ -15,27 +15,10 @@ BASE_URL = os.environ.get('TEST_BASE_URL', 'http://localhost:5001')
 @pytest.fixture(scope="module")
 def driver():
     options = Options()
-    # Comment out the headless option for debugging
-    # options.add_argument('--headless')  
-
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--remote-debugging-port=9222')
-    options.add_argument('--disable-gpu')
-    options.add_argument('--window-size=1920,1080')
-    options.add_argument('--disable-software-rasterizer')  # Additional option
-    options.add_argument('--enable-logging')  # Enable logging
-    options.add_argument('--v=1')  # Verbose logging
-
-    try:
-        service = Service(ChromeDriverManager().install())
-        driver = webdriver.Chrome(service=service, options=options)
-        yield driver
-    except WebDriverException as e:
-        pytest.skip(f"Could not initialize WebDriver: {e}")
-    finally:
-        if 'driver' in locals():
-            driver.quit()
+    # Add Firefox-specific options if needed
+    service = FirefoxService(GeckoDriverManager().install())
+    driver = webdriver.Firefox(service=service, options=options)
+    yield driver
 
 @pytest.mark.timeout(60)  # Increased timeout for each test
 def test_home_page(driver):
