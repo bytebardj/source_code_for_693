@@ -10,15 +10,17 @@ from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.firefox import GeckoDriverManager
 
 
-BASE_URL = os.environ.get('TEST_BASE_URL', 'http://localhost:5001')
+BASE_URL = os.environ.get('TEST_BASE_URL', 'http://localhost:5000')
 
 @pytest.fixture(scope="module")
 def driver():
     options = Options()
-    # Add Firefox-specific options if needed
+    options.headless = True  # Enable headless mode
     service = FirefoxService(GeckoDriverManager().install())
     driver = webdriver.Firefox(service=service, options=options)
     yield driver
+    driver.quit()  # Ensure the browser is closed after tests
+
 
 @pytest.mark.timeout(60)  # Increased timeout for each test
 def test_home_page(driver):
