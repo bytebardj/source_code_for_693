@@ -51,11 +51,11 @@ def test_add_to_cart(driver):
     print(f"Cart count is now: {cart_count.text}")
     assert int(cart_count.text) > 0
 
-@pytest.mark.timeout(60)
+@pytest.mark.selenium
 def test_checkout_process(driver):
     print("Navigating to products for checkout...")
     driver.get(f"{BASE_URL}/products")
-    wait = WebDriverWait(driver, 20)  # Increased wait time
+    wait = WebDriverWait(driver, 20)
     add_to_cart_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, ".product .add-to-cart")))
     add_to_cart_button.click()
     
