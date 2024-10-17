@@ -75,3 +75,4 @@ def test_checkout_process(driver):
     confirmation = wait.until(EC.presence_of_element_located((By.ID, "order-confirmation")))
     print("Checking order confirmation...")
     assert "Thank you for your order" in confirmation.text
+    
