@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: 693project
+  name: python-webapp
 spec:
   replicas: 2
   selector:
