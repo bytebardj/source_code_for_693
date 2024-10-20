@@ -18,7 +18,6 @@ tzdata==2024.1
 tzlocal==5.2
 Werkzeug==3.0.3
 
-
 # Refund Functionality
 ## User Story:
 As Fresh Harvest Delivery, we aim to introduce innovative features to our system to enhance the user experience and differentiate our platform from competitors.
@@ -83,3 +82,5 @@ Staff can change order assignment when the 'begin' button is available, when it 
 
 # Subscription
 Customers can change subscription by changing product name and/or how often they want the box to be delivered. Customers can order new subscription, and in box page, they can choose 'one-off' and other options like 'weekly'. If customers choose 'one-off', it won't be shown in their subscriptions. Only other types of subscriptions can be seen in customer subscription page.
+
+# Finished deployment part.
