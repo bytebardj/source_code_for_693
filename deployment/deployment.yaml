@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: python-webapp
-        image: image: joehunt693/python-webapp:latest
+        image: <dockerhub-username>/python-webapp:latest
         ports:
         - containerPort: 5000
