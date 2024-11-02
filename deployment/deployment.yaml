@@ -17,4 +17,3 @@ spec:
         image: <dockerhub-username>/webapp:latest
         ports:
         - containerPort: 5000
-        
