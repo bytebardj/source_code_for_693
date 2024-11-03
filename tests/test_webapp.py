@@ -2,7 +2,6 @@ import pytest
 from flask import url_for
 import time
 
-
 @pytest.fixture(autouse=True)
 def timeout():
     yield
